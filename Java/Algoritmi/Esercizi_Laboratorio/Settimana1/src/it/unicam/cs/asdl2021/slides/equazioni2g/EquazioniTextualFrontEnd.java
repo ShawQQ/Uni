@@ -28,6 +28,7 @@ public class EquazioniTextualFrontEnd {
         Double c = null;
         while (!terminate) {
             // leggo il parametro a
+        	//rimossa inizializzazione retry
             boolean retry;
             do {
             	//set retry to false per evitare loop in caso di input errato
