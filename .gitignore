@@ -1,1 +1,63 @@
+# GENERAL
 */*/Lezioni/*
+
+# ECLIPSE
+Java/Algoritmi/.metadata/
+Java/Algoritmi/bin/
+Java/Algoritmi/tmp/
+Java/Algoritmi/*.tmp
+Java/Algoritmi/*.bak
+Java/Algoritmi/*.swp
+Java/Algoritmi/*~.nib
+Java/Algoritmi/local.properties
+Java/Algoritmi/.settings/
+Java/Algoritmi/.loadpath
+Java/Algoritmi/.recommenders
+
+# External tool builders
+Java/Algoritmi/.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+Java/Algoritmi/*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+Java/Algoritmi/*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+Java/Algoritmi/.cproject
+
+# CDT- autotools
+Java/Algoritmi/.autotools
+
+# Java annotation processor (APT)
+Java/Algoritmi/.factorypath
+
+# PDT-specific (PHP Development Tools)
+Java/Algoritmi/.buildpath
+
+# sbteclipse plugin
+Java/Algoritmi/.target
+
+# Tern plugin
+Java/Algoritmi/.tern-project
+
+# TeXlipse plugin
+Java/Algoritmi/.texlipse
+
+# STS (Spring Tool Suite)
+Java/Algoritmi/.springBeans
+
+# Code Recommenders
+Java/Algoritmi/.recommenders/
+
+# Annotation Processing
+Java/Algoritmi/.apt_generated/
+Java/Algoritmi/.apt_generated_test/
+
+# Scala IDE specific (Scala & Java development for Eclipse)
+Java/Algoritmi/.cache-main
+Java/Algoritmi/.scala_dependencies
+Java/Algoritmi/.worksheet
+
+# Uncomment this line if you wish to ignore the project description file.
+# Typically, this file would be tracked if it co
