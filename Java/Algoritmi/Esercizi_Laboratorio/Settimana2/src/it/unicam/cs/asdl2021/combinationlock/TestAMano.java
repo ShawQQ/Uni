@@ -39,9 +39,9 @@ public class TestAMano {
         System.out
                 .println("Ho creato correttamente la cassaforte e l'ho chiusa");
         if (c.isOpen())
-            System.out.println("ERRORE: La cassaforte non si Ã¨ chiusa correttamente!");
+            System.out.println("ERRORE: La cassaforte non si è chiusa correttamente!");
         else
-            System.out.println("La cassaforte si Ã¨ chiusa correttamente.");
+            System.out.println("La cassaforte si è chiusa correttamente.");
         System.out.println("Imposto la combinazione errata...");
         c.setPosition(input.trim().charAt(0));
         c.setPosition(input.trim().charAt(1));
@@ -49,19 +49,19 @@ public class TestAMano {
         c.open();
         if (c.isOpen())
             System.out.println(
-                    "ERRORE: La cassaforte si Ã¨ aperta con la combinazione errata!");
+                    "ERRORE: La cassaforte si è aperta con la combinazione errata!");
         else
-            System.out.println("La cassaforte Ã¨ rimasta chiusa correttamente.");
+            System.out.println("La cassaforte è rimasta chiusa correttamente.");
         System.out.println("Imposto la combinazione giusta...");
         c.setPosition(input.trim().charAt(0));
         c.setPosition(input.trim().charAt(1));
         c.setPosition(input.trim().trim().charAt(2));
         c.open();
         if (c.isOpen())
-            System.out.println("La cassaforte si Ã¨ aperta correttamente!");
+            System.out.println("La cassaforte si è aperta correttamente!");
         else
             System.out.println(
-                    "ERRORE: La cassaforte Ã¨ rimasta chiusa con la combinazione giusta!");
+                    "ERRORE: La cassaforte è rimasta chiusa con la combinazione giusta!");
         System.out.println("Creo uno scassinatore...");
         Burglar f = new Burglar(c);
         System.out.println("Lo scassinatore dice che la combinazione Ã¨ "
