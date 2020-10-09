@@ -8,7 +8,8 @@ package it.unicam.cs.asdl2021.combinationlock;
  *
  */
 public class Burglar {
-
+	private int attempts = 0;
+	private CombinationLock lock;
     /**
      * Costruisce uno scassinatore per una certa cassaforte.
      * 
@@ -16,7 +17,11 @@ public class Burglar {
      * @throw NullPointerException se la cassaforte passata è nulla
      */
     public Burglar(CombinationLock aCombinationLock) {
-        // TODO implementare
+        if(aCombinationLock == null) {
+        	throw new NullPointerException("Cassaforte nulla");
+        }
+        
+        this.lock = aCombinationLock;
     }
 
     /**
@@ -25,8 +30,28 @@ public class Burglar {
      * @return la combinazione della cassaforte forzata.
      */
     public String findCombination() {
-        // TODO implementare
-        return null;
+    	String combination = "";
+        for (int i = 65; i < 91; i++) {
+        	for(int j = 65; j < 91; j++) {
+        		for(int k = 65; k < 91; k++) {
+        			attempts++;
+        			lock.setPosition((char) i);
+        			lock.setPosition((char) j);
+        			lock.setPosition((char) k);
+        			lock.open();
+        			
+        			if(lock.isOpen()) {
+        				//salvo la combinazione e ritorno
+        				combination += (char) i;
+        				combination += (char) j;
+        				combination += (char) k;
+        				return combination;
+        			}
+        		}
+        	}
+        }
+        
+        return combination;
     }
 
     /**
@@ -38,7 +63,6 @@ public class Burglar {
      *         forzata.
      */
     public long getAttempts() {
-        // TODO implementare
-        return -1;
+        return attempts;
     }
 }
