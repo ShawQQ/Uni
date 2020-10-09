@@ -3,16 +3,16 @@
 
 # ECLIPSE
 Java/Algoritmi/.metadata/
-Java/Algoritmi/bin/
+Java/Algoritmi/*/*/bin/
 Java/Algoritmi/tmp/
-Java/Algoritmi/*.tmp
-Java/Algoritmi/*.bak
-Java/Algoritmi/*.swp
-Java/Algoritmi/*~.nib
-Java/Algoritmi/local.properties
-Java/Algoritmi/.settings/
-Java/Algoritmi/.loadpath
-Java/Algoritmi/.recommenders
+Java/Algoritmi/*/*/*.tmp
+Java/Algoritmi/*/*/*.bak
+Java/Algoritmi/*/*/*.swp
+Java/Algoritmi/*/*/*~.nib
+Java/Algoritmi/*/*/local.properties
+Java/Algoritmi/*/*/.settings/
+Java/Algoritmi/*/*/.loadpath
+Java/Algoritmi/*/*/.recommenders
 
 # External tool builders
 Java/Algoritmi/.externalToolBuilders/
