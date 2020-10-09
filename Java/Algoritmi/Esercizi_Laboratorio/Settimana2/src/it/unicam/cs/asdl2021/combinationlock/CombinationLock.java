@@ -1,5 +1,8 @@
 package it.unicam.cs.asdl2021.combinationlock;
 
+import java.util.*;
+import java.util.regex.Pattern;
+
 /**
  * Un oggetto cassaforte con combinazione ha una manopola che pu√≤ essere
  * impostata su certe posizioni contrassegnate da lettere maiuscole. La
@@ -9,7 +12,10 @@ package it.unicam.cs.asdl2021.combinationlock;
  * @author Luca Tesei
  */
 public class CombinationLock {
+	private String combination;
+	private String positions = "";
 	private boolean isOpen;
+	private boolean modified;
     /**
      * Costruisce una cassaforte <b>aperta</b> con una data combinazione
      * 
@@ -18,10 +24,20 @@ public class CombinationLock {
      *                         lettere maiuscole dell'alfabeto inglese
      * @throw IllegalArgumentException se la combinazione fornita non Ë una
      *        stringa di 3 lettere maiuscole dell'alfabeto inglese
-     * @throw NullPointerException se la combinazione fornita √® nulla
+     * @throw NullPointerException se la combinazione fornita Ë nulla
      */
     public CombinationLock(String aCombination) {
-        // TODO implementare
+        if(aCombination == null) {
+        	throw new NullPointerException("Combinazione nulla");
+        }
+        //regex per controllare che aCombination sia una stringa da 3 caratteri inglesi 
+        if(!Pattern.matches("[A-Z][A-Z][A-Z]", aCombination)) {
+        	throw new IllegalArgumentException("Combinazione non valida");
+        }
+        
+        this.combination = aCombination;
+        this.modified = false;
+        this.isOpen = true;
     }
 
     /**
@@ -36,7 +52,18 @@ public class CombinationLock {
      *                                      inglese
      */
     public void setPosition(char aPosition) {
-        // TODO implementare
+        if(!Character.isLetter(aPosition) || aPosition != Character.toUpperCase(aPosition)) {
+        	throw new IllegalArgumentException("Carattere non valido");
+        }
+        
+        positions += aPosition;
+        //se l'utente ha inserito pi˘ di 3 caratteri mantengo solo gli ultimi 3
+        int len = positions.length();
+        if(len > 3) {
+        	positions = positions.substring(len - 3, len);
+        }
+        //stringa modificata
+        modified = true;
     }
 
     /**
@@ -44,7 +71,13 @@ public class CombinationLock {
      * ultime tre posizioni impostate.
      */
     public void open() {
-        // TODO implementare
+    	//se non Ë stato inserita una nuova stringa la cassaforte rimane chiusa indipendentemente dall'input dell'utente
+    	if(!modified) {
+    		isOpen = false;
+    		return;
+    	}
+    	//combinazione inserita dall'utente
+        isOpen = positions.equals(combination);
     }
 
     /**
@@ -53,8 +86,7 @@ public class CombinationLock {
      * @return true se la cassaforte Ë attualmente aperta, false altrimenti
      */
     public boolean isOpen() {
-        // TODO implementare
-        return false;
+        return isOpen;
     }
 
     /**
@@ -65,7 +97,8 @@ public class CombinationLock {
      * sono proprio la combinazione attuale.
      */
     public void lock() {
-        // TODO implementare
+        modified = false;
+        isOpen = false;
     }
 
     /**
@@ -81,6 +114,18 @@ public class CombinationLock {
      * @throw NullPointerException se la combinazione fornita Ë nulla
      */
     public void lockAndChangeCombination(String aCombination) {
-        // TODO implementare
+		if(aCombination == null) {
+			throw new NullPointerException("Combinazione nulla");
+	    }
+		//regex per controllare che aCombination sia una stringa da 3 caratteri inglesi 
+	    if(!Pattern.matches("[A-Z][A-Z][A-Z]", aCombination)) {
+	    	throw new IllegalArgumentException("Combinazione non valida");
+	    }
+	    
+	    //se la cassaforte Ë chiusa non faccio nulla
+    	if(!isOpen) return;
+    	//chiudo la cassaforte e cambio combinazione
+    	isOpen = false;
+    	combination = aCombination;
     }
 }
