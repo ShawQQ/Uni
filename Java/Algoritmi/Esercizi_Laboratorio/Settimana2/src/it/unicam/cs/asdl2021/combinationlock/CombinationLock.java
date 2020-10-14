@@ -1,6 +1,5 @@
 package it.unicam.cs.asdl2021.combinationlock;
 
-import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -22,9 +21,9 @@ public class CombinationLock {
      * @param aCombination
      *                         la combinazione che deve essere una stringa di 3
      *                         lettere maiuscole dell'alfabeto inglese
-     * @throw IllegalArgumentException se la combinazione fornita non è una
+     * @throw IllegalArgumentException se la combinazione fornita non ï¿½ una
      *        stringa di 3 lettere maiuscole dell'alfabeto inglese
-     * @throw NullPointerException se la combinazione fornita è nulla
+     * @throw NullPointerException se la combinazione fornita ï¿½ nulla
      */
     public CombinationLock(String aCombination) {
         if(aCombination == null) {
@@ -47,7 +46,7 @@ public class CombinationLock {
      *                      un carattere lettera maiuscola su cui viene
      *                      impostata la manopola
      * @throws IllegalArgumentException
-     *                                      se il carattere fornito non è una
+     *                                      se il carattere fornito non ï¿½ una
      *                                      lettera maiuscola dell'alfabeto
      *                                      inglese
      */
@@ -57,7 +56,7 @@ public class CombinationLock {
         }
         
         positions += aPosition;
-        //se l'utente ha inserito più di 3 caratteri mantengo solo gli ultimi 3
+        //se l'utente ha inserito piï¿½ di 3 caratteri mantengo solo gli ultimi 3
         int len = positions.length();
         if(len > 3) {
         	positions = positions.substring(len - 3, len);
@@ -71,7 +70,7 @@ public class CombinationLock {
      * ultime tre posizioni impostate.
      */
     public void open() {
-    	//se non è stato inserita una nuova stringa la cassaforte rimane chiusa indipendentemente dall'input dell'utente
+    	//se non ï¿½ stato inserita una nuova stringa la cassaforte rimane chiusa indipendentemente dall'input dell'utente
     	if(!modified) {
     		isOpen = false;
     		return;
@@ -81,9 +80,9 @@ public class CombinationLock {
     }
 
     /**
-     * Determina se la cassaforte è aperta.
+     * Determina se la cassaforte ï¿½ aperta.
      * 
-     * @return true se la cassaforte è attualmente aperta, false altrimenti
+     * @return true se la cassaforte ï¿½ attualmente aperta, false altrimenti
      */
     public boolean isOpen() {
         return isOpen;
@@ -103,15 +102,15 @@ public class CombinationLock {
 
     /**
      * Chiude la cassaforte e modifica la combinazione. Funziona solo se la
-     * cassaforte è attualmente aperta. Se la cassaforte è attualmente chiusa
+     * cassaforte ï¿½ attualmente aperta. Se la cassaforte ï¿½ attualmente chiusa
      * rimane chiusa e la combinazione non viene cambiata.
      * 
      * @param aCombination
      *                         la nuova combinazione che deve essere una stringa
      *                         di 3 lettere maiuscole dell'alfabeto inglese
-     * @throw IllegalArgumentException se la combinazione fornita non è una
+     * @throw IllegalArgumentException se la combinazione fornita non ï¿½ una
      *        stringa di 3 lettere maiuscole dell'alfabeto inglese
-     * @throw NullPointerException se la combinazione fornita è nulla
+     * @throw NullPointerException se la combinazione fornita ï¿½ nulla
      */
     public void lockAndChangeCombination(String aCombination) {
 		if(aCombination == null) {
@@ -122,7 +121,7 @@ public class CombinationLock {
 	    	throw new IllegalArgumentException("Combinazione non valida");
 	    }
 	    
-	    //se la cassaforte è chiusa non faccio nulla
+	    //se la cassaforte ï¿½ chiusa non faccio nulla
     	if(!isOpen) return;
     	//chiudo la cassaforte e cambio combinazione
     	isOpen = false;
