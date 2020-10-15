@@ -62,7 +62,7 @@ public class Burglar {
      *         combinazione, oppure -1 se la cassaforte non è stata ancora
      *         forzata.
      */
-    public long getAttempts() {
+    public int getAttempts() {
         return attempts;
     }
 }
