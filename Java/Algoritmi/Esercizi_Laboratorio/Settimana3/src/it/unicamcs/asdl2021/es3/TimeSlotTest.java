@@ -117,13 +117,16 @@ class TimeSlotTest {
         assertTrue(ts2.compareTo(ts1) < 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
         // ts2 == ts1
+        ts2 = new TimeSlot(g3, g4);
         assertTrue(ts1.compareTo(ts2) == 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
         // ts2 inizia dopo ts1
+        ts2 = new TimeSlot(g3, g4);
         assertTrue(ts1.compareTo(ts2) < 0);
         assertTrue(ts2.compareTo(ts1) > 0);
         // ts2 inizia dopo ts1
         g4.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3,g4);
         assertTrue(ts2.compareTo(ts1) > 0);
         assertTrue(ts1.compareTo(ts2) < 0);
     }
