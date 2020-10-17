@@ -92,6 +92,7 @@ class TimeSlotTest {
         assertTrue(ts1.equals(ts2));
         // sposto in avanti di un'ora l'inizio di g3
         g3.roll(Calendar.HOUR, 1);
+        ts2 = new TimeSlot(g3, g4);
         assertFalse(ts2.equals(ts1));
         assertFalse(ts1.equals(ts2));
         // classe diversa
