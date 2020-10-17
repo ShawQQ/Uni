@@ -53,12 +53,12 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(start == null || stop == null) {
         	throw new NullPointerException("Intervallo nullo");
         }
-        if(start.after(stop)) {
+        if(start.after(stop) || start.equals(stop)) {
         	throw new IllegalArgumentException("Intervallo non valido");
         }
     	this.start = start;
         this.stop  = stop;
-        //timestamp in secondi (based Java che usa i millisecondi al posto dei secondi come il resto del mondo)
+        //timestamp in secondi(based Java che lo ridà solo in millisecondi)
         this.startTimeStamp = this.start.getTimeInMillis() / 1000L;
         this.stopTimeStamp = this.stop.getTimeInMillis() / 1000L;
     }
@@ -145,7 +145,8 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(this.startTimeStamp < o.startTimeStamp) {
         	return -1;
         }
-        if(this.stopTimeStamp > o.stopTimeStamp) {
+        
+        if(this.startTimeStamp > o.startTimeStamp) {
         	return 1;
         }
         
@@ -160,7 +161,6 @@ public class TimeSlot implements Comparable<TimeSlot> {
         		return 1;
         	}
         }
-        
         //intervalli uguali
         return 0;
     }
@@ -182,12 +182,33 @@ public class TimeSlot implements Comparable<TimeSlot> {
         	throw new NullPointerException("Impossibile controllare timeslot nulli");
         }
         
+        TimeSlot startSlot;
+        TimeSlot endSlot;
+        //assicuro che gli slot siano ordinati
+        if(this.compareTo(o) < 0) {
+        	startSlot = this;
+        	endSlot = o;
+        }else {
+        	startSlot = o;
+        	endSlot = this;
+        }
+        
+        long overlapTime;
+        long startStamp = startSlot.stopTimeStamp;
+        long endStamp = endSlot.startTimeStamp;
         //controllo se i due intervalli si sovrappongono
-        if(this.stopTimeStamp > o.startTimeStamp) {
-        	//estraggo minuti dalle date
-        	int startOverlap = this.stop.get(Calendar.MINUTE);
-        	int endOverlap = o.start.get(Calendar.MINUTE);
-        	if(Math.abs(endOverlap - startOverlap) > MINUTES_OF_TOLERANCE_FOR_OVERLAPPING) {
+        if(startStamp >= endStamp) {
+        	//se il secondo slot finisce prima del primo il tempo di overlap è pari alla durata totale del secondo slot
+        	//se il primo slot finisce prima del secondo il tempo di overlap è pari alla differenza tra i due timestamp
+        	if(endSlot.stopTimeStamp < startSlot.stopTimeStamp) {
+        		overlapTime = (endSlot.stopTimeStamp - endSlot.startTimeStamp);
+        	}else {
+        		overlapTime = (startStamp - endStamp);
+        	}
+        	//converto overlapTime in minuti
+        	overlapTime = overlapTime / 60L;
+        	//controllo se i due slot si sovrappongono per abbastanza tempo
+        	if(overlapTime > MINUTES_OF_TOLERANCE_FOR_OVERLAPPING) {
         		return true;
         	}else {
         		return false;
@@ -205,7 +226,7 @@ public class TimeSlot implements Comparable<TimeSlot> {
     public String toString() {
     	String interval;
     	//formato data
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH.mm");
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("d/MM/yyyy HH.m");
     	interval = "[" + dateFormat.format(this.start.getTime()) + " - " + dateFormat.format(this.stop.getTime()) + "]";
     	return interval;
     }
