@@ -28,48 +28,48 @@ public class Prenotazione implements Comparable<Prenotazione> {
      * @param motivo
      *                     il motivo della prenotazione
      * @throws NullPointerException
-     *                                  se uno qualsiasi degli oggetti passati Ã¨
+     *                                  se uno qualsiasi degli oggetti passati è
      *                                  null
      */
     public Prenotazione(String aula, TimeSlot timeSlot, String docente,
             String motivo) {
         // TODO implementare
-        this.aula = null;
-        this.timeSlot = null;
-        this.docente = null;
-        this.motivo = null;
+        if(aula == null || timeSlot == null || docente == null || motivo == null) {
+        	throw new NullPointerException("Impossibile processare argomenti nulli");
+        }
+        
+        this.aula = aula;
+        this.timeSlot = timeSlot;
+        this.docente = docente;
+        this.motivo = motivo;
     }
 
     /**
      * @return the aula
      */
     public String getAula() {
-        // TODO implementare
-        return null;
+        return this.aula;
     }
 
     /**
      * @return the timeSlot
      */
     public TimeSlot getTimeSlot() {
-     // TODO implementare
-        return null;
+    	return this.timeSlot;
     }
 
     /**
      * @return the docente
      */
     public String getDocente() {
-     // TODO implementare
-        return null;
+        return this.docente;
     }
 
     /**
      * @return the motivo
      */
     public String getMotivo() {
-     // TODO implementare
-        return null;
+        return this.motivo;
     }
 
     /*
@@ -77,17 +77,33 @@ public class Prenotazione implements Comparable<Prenotazione> {
      */
     @Override
     public int hashCode() {
-     // TODO implementare
-        return -1;
+    	int prime = 59;
+    	int result = 1;
+    	result = result * prime + this.aula.hashCode();
+    	result = result * prime + this.timeSlot.hashCode();
+        return result;
     }
 
     /*
-     * L'uguaglianza Ã¨ data solo da stessa aula e stesso time slot. Non sono
+     * L'uguaglianza è data solo da stessa aula e stesso time slot. Non sono
      * ammesse prenotazioni diverse con stessa aula e stesso time slot.
      */
     @Override
     public boolean equals(Object obj) {
-     // TODO implementare
+    	if(this == obj) {
+    		return true;
+    	}
+    	if(obj == null) {
+    		return false;
+    	}
+    	if(!(obj instanceof Prenotazione)) {
+    		return false;
+    	}
+    	
+    	Prenotazione other = (Prenotazione) obj;
+    	if(this.aula.equals(other.aula) && this.timeSlot.equals(other.timeSlot)) {
+    		return true;
+    	}
         return false;
     }
 
@@ -98,8 +114,11 @@ public class Prenotazione implements Comparable<Prenotazione> {
      */
     @Override
     public int compareTo(Prenotazione o) {
-     // TODO implementare
-        return 0;
+    	if(this.timeSlot.compareTo(o.timeSlot) == 0) {
+    		return this.aula.compareTo(o.aula);
+    	}else {
+    		return this.timeSlot.compareTo(o.timeSlot);
+    	}
     }
 
     @Override
