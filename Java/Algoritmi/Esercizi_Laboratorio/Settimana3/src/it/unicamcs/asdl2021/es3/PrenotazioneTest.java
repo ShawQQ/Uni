@@ -150,8 +150,8 @@ class PrenotazioneTest {
         assertFalse(p3.equals(p2));
         Prenotazione p4 = new Prenotazione("B1",
                 ts1, " ", "");
-        assertFalse(p1.equals(p4));
-        assertFalse(p4.equals(p1));
+        assertTrue(p1.equals(p4));
+        assertTrue(p4.equals(p1));
         // Classe diversa
         assertFalse(p1.equals("Pippo"));
         // Null
@@ -177,17 +177,24 @@ class PrenotazioneTest {
         assertTrue(p1.compareTo(p2) > 0);
         assertTrue(p2.compareTo(p1) < 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g4);
+        p2 = new Prenotazione("M1", ts2, "CC", "DD");
+        p3 = new Prenotazione("B1", ts2, "CC", "DD");
         // ts2 == ts1, aula di p1 precede aula di p2
         assertTrue(p1.compareTo(p2) < 0);
         assertTrue(p2.compareTo(p1) > 0);
         // p1 == p3
         assertTrue(p1.compareTo(p3) == 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g4);
+        p2 = new Prenotazione("M1", ts2, "CC", "DD");
         // p2 inizia dopo p1
         assertTrue(p1.compareTo(p2) < 0);
         assertTrue(p2.compareTo(p1) > 0);
         // p2 inizia dopo p1
         g4.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g4);
+        p2 = new Prenotazione("M1", ts2, "CC", "DD");
         assertTrue(p2.compareTo(p1) > 0);
         assertTrue(p1.compareTo(p2) < 0);
     }
