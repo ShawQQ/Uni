@@ -61,12 +61,14 @@ public class Aula implements Comparable<Aula> {
      *                                  richieste è nulla
      */
     public Aula(String nome, String location) {
-        // TODO implementare
-        // Nota: i due assegnamenti che seguono servono solo
-        // per non creare un errore in questo template del codice. Vanno
-        // modificati.
-        this.nome = null;
-        this.location = null;
+    	if(nome == null || location == null) {
+    		throw new NullPointerException("Argomenti nulli");
+    	}
+    	
+    	this.nome = nome;
+    	this.location = location;
+    	this.facilities = new Facility[INIT_NUM_FACILITIES];
+    	this.prenotazioni = new Prenotazione[INIT_NUM_PRENOTAZIONI];
     }
 
     /*
@@ -74,70 +76,77 @@ public class Aula implements Comparable<Aula> {
      */
     @Override
     public int hashCode() {
-        // TODO implementare
-        return -1;
+        int prime = 91;
+        int result = prime + this.nome.hashCode();
+        return result;
     }
 
     /* Due aule sono uguali se e solo se hanno lo stesso nome */
     @Override
     public boolean equals(Object obj) {
-        // TODO implementare
+        if(this == obj) {
+        	return true;
+        }
+        if(obj == null) {
+        	return false;
+        }
+        if(!(obj instanceof Aula)) {
+        	return false;
+        }
+        
+        Aula other = (Aula) obj;
+        if(this.nome.equals(other.nome)) {
+        	return true;
+        }
         return false;
     }
 
     /* L'ordinamento naturale si basa sul nome dell'aula */
     @Override
     public int compareTo(Aula o) {
-        // TODO implementare
-        return 0;
+        return this.nome.compareTo(o.nome);
     }
 
     /**
      * @return the facilities
      */
     public Facility[] getFacilities() {
-        // TODO implementare
-        return null;
+        return this.facilities;
     }
 
     /**
      * @return il numero corrente di facilities
      */
     public int getNumeroFacilities() {
-        // TODO implementare
-        return -1;
+    	return this.numFacilities;
     }
 
     /**
      * @return the nome
      */
     public String getNome() {
-        // TODO implementare
-        return null;
+    	return this.nome;
     }
 
     /**
      * @return the location
      */
     public String getLocation() {
-        // TODO implementare
-        return null;
+    	return this.location;
     }
 
     /**
      * @return the prenotazioni
      */
     public Prenotazione[] getPrenotazioni() {
-        // TODO implementare
-        return null;
+    	return this.prenotazioni;
     }
 
     /**
      * @return il numero corrente di prenotazioni
      */
     public int getNumeroPrenotazioni() {
-        // TODO implementare
-        return -1;
+    	return this.numPrenotazioni;
     }
 
     /**
@@ -152,12 +161,26 @@ public class Aula implements Comparable<Aula> {
      *                                  se la facility passata è nulla
      */
     public boolean addFacility(Facility f) {
-        // TODO implementare
         // Nota: attenzione! Per controllare se una facility è già presente
         // bisogna usare il metodo equals della classe Facility.
         // Nota: attenzione bis! Si noti che per le sottoclassi di Facility non
         // è richiesto di ridefinire ulteriormente il metodo equals...
-        return false;
+    	int i = 0;
+    	
+    	if(f == null) {
+    		throw new NullPointerException("Facility nulla");
+    	}
+    	
+    	for( i = 0; i < this.facilities.length; i++) {
+    		if(f.equals(facilities[i])) {
+    			return false;
+    		}
+    	}
+    	if(this.facilities.length >= INIT_NUM_FACILITIES) {
+    		//TODO: raddopiare dimensione arrya
+    	}
+    	this.facilities[i + 1] = f;
+    	return true;
     }
 
     /**
@@ -173,8 +196,21 @@ public class Aula implements Comparable<Aula> {
      *                                  se il time slot passato è nullo
      */
     public boolean isFree(TimeSlot ts) {
-        // TODO implementare
-        return false;
+    	if(ts == null) {
+    		throw new NullPointerException("Timeslot nullo");
+    	}
+    	
+    	for(int i = 0; i < this.prenotazioni.length; i++) {
+    		if(prenotazioni[i] == null) {
+    			break;
+    		}
+    		
+    		TimeSlot otherSlot = this.prenotazioni[i].getTimeSlot();
+    		if(ts.overlapsWith(otherSlot)) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
 
     /**
@@ -191,8 +227,12 @@ public class Aula implements Comparable<Aula> {
      *                                  se il set di facility richieste è nullo
      */
     public boolean satisfiesFacilities(Facility[] requestedFacilities) {
-        // TODO implementare
-        return false;
+    	if(requestedFacilities == null) {
+    		throw new NullPointerException("Set facility nullo");
+    	}
+    	
+    	boolean satisfy;
+    	return true;
     }
 
     /**

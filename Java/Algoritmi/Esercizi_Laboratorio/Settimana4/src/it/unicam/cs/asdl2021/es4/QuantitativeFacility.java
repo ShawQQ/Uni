@@ -32,16 +32,14 @@ public class QuantitativeFacility extends Facility {
     public QuantitativeFacility(String codice, String descrizione,
             int quantity) {
         super(codice, descrizione);
-        // TODO implementare
-        this.quantity = -1;
+        this.quantity = quantity;
     }
 
     /**
      * @return the quantity
      */
     public int getQuantity() {
-        // TODO implementare
-        return -1;
+    	return this.quantity;
     }
 
     /*
@@ -52,8 +50,20 @@ public class QuantitativeFacility extends Facility {
      */
     @Override
     public boolean satisfies(Facility o) {
-        // TODO implementare
-        return false;
+    	if(o == null) {
+    		throw new NullPointerException("Facility nulla");
+    	}
+    	
+    	if(!(o instanceof QuantitativeFacility)) {
+    		return false;
+    	}
+    	
+    	QuantitativeFacility other = (QuantitativeFacility) o;
+    	if(this.getCodice().equals(other.getCodice()) && this.quantity >= other.quantity) {
+    		return true;
+    	}
+    	
+    	return false;
     }
 
 }

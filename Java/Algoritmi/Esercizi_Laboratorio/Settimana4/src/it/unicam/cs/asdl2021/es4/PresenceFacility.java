@@ -24,7 +24,6 @@ public class PresenceFacility extends Facility {
      */
     public PresenceFacility(String codice, String descrizione) {
         super(codice, descrizione);
-        // TODO implementare
     }
 
     /*
@@ -34,8 +33,18 @@ public class PresenceFacility extends Facility {
      */
     @Override
     public boolean satisfies(Facility o) {
-        // TODO implementare
-        return false;
+    	if(o == null) {
+    		throw new NullPointerException("Facility nulla");
+    	}
+    	if(!(o instanceof PresenceFacility)) {
+    		return false;
+    	}
+    	
+    	PresenceFacility other = (PresenceFacility) o;
+    	if(!this.getCodice().equals(other.getCodice())) {
+    		return false;
+    	}
+    	return true;
     }
 
 }

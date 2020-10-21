@@ -4,7 +4,6 @@
 package it.unicam.cs.asdl2021.es4;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -44,9 +43,9 @@ public class TimeSlot implements Comparable<TimeSlot> {
      *                  fine del time slot
      * @throws NullPointerException
      *                                      se uno dei due istanti, start o
-     *                                      stop, è null
+     *                                      stop, ï¿½ null
      * @throws IllegalArgumentException
-     *                                      se start è uguale o successivo a
+     *                                      se start ï¿½ uguale o successivo a
      *                                      stop
      */
     public TimeSlot(GregorianCalendar start, GregorianCalendar stop) {
@@ -58,7 +57,7 @@ public class TimeSlot implements Comparable<TimeSlot> {
         }
     	this.start = start;
         this.stop  = stop;
-        //timestamp in secondi(based Java che lo ridà solo in millisecondi)
+        //timestamp in secondi(based Java che lo ridï¿½ solo in millisecondi)
         this.startTimeStamp = this.start.getTimeInMillis() / 1000L;
         this.stopTimeStamp = this.stop.getTimeInMillis() / 1000L;
     }
@@ -103,8 +102,8 @@ public class TimeSlot implements Comparable<TimeSlot> {
     }
 
     /*
-     * Un time slot è uguale a un altro se rappresenta esattamente lo stesso
-     * intervallo di tempo, cioé se inizia nello stesso istante e termina nello
+     * Un time slot ï¿½ uguale a un altro se rappresenta esattamente lo stesso
+     * intervallo di tempo, cioï¿½ se inizia nello stesso istante e termina nello
      * stesso istante.
      */
     @Override
@@ -131,9 +130,9 @@ public class TimeSlot implements Comparable<TimeSlot> {
     /*
      * Un time slot precede un altro se inizia prima. Se due time slot iniziano
      * nello stesso momento quello che finisce prima precede l'altro. Se hanno
-     * stesso inizio e stessa fine sono uguali, in compatibilità  con equals.
+     * stesso inizio e stessa fine sono uguali, in compatibilitï¿½  con equals.
      * @throws NullPointerException 
-     * 								se il timeslot passato è nullo 
+     * 								se il timeslot passato ï¿½ nullo 
      */
     @Override
     public int compareTo(TimeSlot o) {
@@ -172,10 +171,10 @@ public class TimeSlot implements Comparable<TimeSlot> {
      * @param o
      *              il time slot che viene passato per il controllo di
      *              sovrapposizione
-     * @return true se questo time slot si sovrappone per più di
+     * @return true se questo time slot si sovrappone per piï¿½ di
      *         MINUTES_OF_TOLERANCE_FOR_OVERLAPPING minuti a quello passato
      * @throws NullPointerException
-     *                                  se il time slot passato è nullo
+     *                                  se il time slot passato ï¿½ nullo
      */
     public boolean overlapsWith(TimeSlot o) {
         if(o == null) {
@@ -198,8 +197,8 @@ public class TimeSlot implements Comparable<TimeSlot> {
         long endStamp = endSlot.startTimeStamp;
         //controllo se i due intervalli si sovrappongono
         if(startStamp >= endStamp) {
-        	//se il secondo slot finisce prima del primo il tempo di overlap è pari alla durata totale del secondo slot
-        	//se il primo slot finisce prima del secondo il tempo di overlap è pari alla differenza tra i due timestamp
+        	//se il secondo slot finisce prima del primo il tempo di overlap ï¿½ pari alla durata totale del secondo slot
+        	//se il primo slot finisce prima del secondo il tempo di overlap ï¿½ pari alla differenza tra i due timestamp
         	if(endSlot.stopTimeStamp < startSlot.stopTimeStamp) {
         		overlapTime = (endSlot.stopTimeStamp - endSlot.startTimeStamp);
         	}else {
