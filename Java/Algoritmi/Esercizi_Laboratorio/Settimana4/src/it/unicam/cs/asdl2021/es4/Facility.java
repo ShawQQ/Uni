@@ -74,7 +74,7 @@ public abstract class Facility {
     	}
     	
     	Facility other = (Facility) obj;
-    	if(other.codice == this.codice) {
+    	if(this.codice.equals(other.codice)) {
     		return true;
     	}
         return false;
