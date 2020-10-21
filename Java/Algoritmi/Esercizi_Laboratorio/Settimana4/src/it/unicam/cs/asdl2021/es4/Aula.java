@@ -1,6 +1,8 @@
 package it.unicam.cs.asdl2021.es4;
 
 
+import java.util.Arrays;
+
 /**
  * Un oggetto della classe aula rappresenta una certa aula con le sue facilities
  * e le sue prenotazioni.
@@ -67,6 +69,8 @@ public class Aula implements Comparable<Aula> {
     	
     	this.nome = nome;
     	this.location = location;
+    	this.numFacilities = 0;
+    	this.numPrenotazioni = 0;
     	this.facilities = new Facility[INIT_NUM_FACILITIES];
     	this.prenotazioni = new Prenotazione[INIT_NUM_PRENOTAZIONI];
     }
@@ -165,21 +169,26 @@ public class Aula implements Comparable<Aula> {
         // bisogna usare il metodo equals della classe Facility.
         // Nota: attenzione bis! Si noti che per le sottoclassi di Facility non
         // è richiesto di ridefinire ulteriormente il metodo equals...
-    	int i = 0;
-    	
     	if(f == null) {
     		throw new NullPointerException("Facility nulla");
     	}
-    	
-    	for( i = 0; i < this.facilities.length; i++) {
-    		if(f.equals(facilities[i])) {
-    			return false;
-    		}
-    	}
-    	if(this.facilities.length >= INIT_NUM_FACILITIES) {
-    		//TODO: raddopiare dimensione arrya
-    	}
-    	this.facilities[i + 1] = f;
+
+    	int currentLength = 0;
+
+        try{
+            while (this.facilities[currentLength] != null) {
+                if(f.equals(this.facilities[currentLength])){
+                    return true;
+                }
+                currentLength++;
+            }
+            this.facilities[currentLength++] = f;
+        }catch(ArrayIndexOutOfBoundsException e){
+            this.facilities = Arrays.copyOf(this.facilities, this.facilities.length * 2);
+            this.facilities[currentLength++] = f;
+        }
+
+        this.numFacilities++;
     	return true;
     }
 
@@ -200,12 +209,12 @@ public class Aula implements Comparable<Aula> {
     		throw new NullPointerException("Timeslot nullo");
     	}
     	
-    	for(int i = 0; i < this.prenotazioni.length; i++) {
+    	for(int i = 0; i < prenotazioni.length; i++) {
     		if(prenotazioni[i] == null) {
     			break;
     		}
     		
-    		TimeSlot otherSlot = this.prenotazioni[i].getTimeSlot();
+    		TimeSlot otherSlot = prenotazioni[i].getTimeSlot();
     		if(ts.overlapsWith(otherSlot)) {
     			return false;
     		}
@@ -230,8 +239,22 @@ public class Aula implements Comparable<Aula> {
     	if(requestedFacilities == null) {
     		throw new NullPointerException("Set facility nullo");
     	}
-    	
-    	boolean satisfy;
+
+    	boolean satisfy = false;
+    	int i = 0;
+    	int j = 0;
+    	while(requestedFacilities[i] != null){
+            while (this.facilities[j] != null) {
+                if(requestedFacilities[i].satisfies(this.facilities[j])){
+                    satisfy = true;
+                }
+                j++;
+            }
+            if(!satisfy){
+                return false;
+            }
+            i++;
+        }
     	return true;
     }
 
@@ -250,6 +273,24 @@ public class Aula implements Comparable<Aula> {
      *                                      richieste è nulla.
      */
     public void addPrenotazione(TimeSlot ts, String docente, String motivo) {
-        // TODO implementare
+        if(ts == null || docente == null || motivo == null){
+            throw new NullPointerException("Parametri nulli");
+        }
+        if(!this.isFree(ts)){
+            throw new IllegalArgumentException("Aula non disponibile");
+        }
+
+        int currentLength = 0;
+
+        try{
+            while(this.prenotazioni[currentLength] != null){
+                currentLength++;
+            }
+            this.prenotazioni[currentLength++] = new Prenotazione(this, ts, docente, motivo);
+        }catch(ArrayIndexOutOfBoundsException e){
+            this.prenotazioni = Arrays.copyOf(this.prenotazioni, this.prenotazioni.length * 2);
+            this.prenotazioni[currentLength++] = new Prenotazione(this, ts, docente, motivo);
+        }
+        this.numPrenotazioni++;
     }
 }
