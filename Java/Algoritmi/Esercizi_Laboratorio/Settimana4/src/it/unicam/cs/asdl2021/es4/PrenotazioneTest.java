@@ -5,6 +5,7 @@ package it.unicam.cs.asdl2021.es4;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 class PrenotazioneTest {
 
     private Aula a;
+    private Aula b;
 
     /**
      * @throws java.lang.Exception
@@ -25,6 +27,7 @@ class PrenotazioneTest {
     @BeforeEach
     void setUp() throws Exception {
         a = new Aula("LA1", "Polo Lodovici");
+        b = new Aula("M1", "Pippo");
     }
 
     /**
@@ -181,23 +184,32 @@ class PrenotazioneTest {
         GregorianCalendar g4 = new GregorianCalendar(2019, 10, 4, 13, 00);
         TimeSlot ts2 = new TimeSlot(g3, g4);
         Prenotazione p1 = new Prenotazione(a, ts1, "AA", "BB");
-        Prenotazione p2 = new Prenotazione(new Aula("M1","Pippo"), ts2, "CC", "DD");
+        Prenotazione p2 = new Prenotazione(b, ts2, "CC", "DD");
         Prenotazione p3 = new Prenotazione(a, ts2, "CC", "DD");
         // p2 inizia prima di p1
         assertTrue(p1.compareTo(p2) > 0);
         assertTrue(p2.compareTo(p1) < 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g2);
+        p2 = new Prenotazione(b, ts2, "CC", "DD");
+        p3 = new Prenotazione(a, ts2, "CC", "DD");
         // ts2 == ts1, aula di p1 precede aula di p2
         assertTrue(p1.compareTo(p2) < 0);
         assertTrue(p2.compareTo(p1) > 0);
         // p1 == p3
         assertTrue(p1.compareTo(p3) == 0);
         g3.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g2);
+        p2 = new Prenotazione(b, ts2, "CC", "DD");
+        p3 = new Prenotazione(a, ts2, "CC", "DD");
         // p2 inizia dopo p1
         assertTrue(p1.compareTo(p2) < 0);
         assertTrue(p2.compareTo(p1) > 0);
         // p2 inizia dopo p1
         g4.roll(Calendar.HOUR_OF_DAY, 1);
+        ts2 = new TimeSlot(g3, g2);
+        p2 = new Prenotazione(b, ts2, "CC", "DD");
+        p3 = new Prenotazione(a, ts2, "CC", "DD");
         assertTrue(p2.compareTo(p1) > 0);
         assertTrue(p1.compareTo(p2) < 0);
     }
