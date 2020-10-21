@@ -26,25 +26,26 @@ public abstract class Facility {
      *                                  richieste è nulla.
      */
     public Facility(String codice, String descrizione) {
-        // TODO implementare
-        this.codice = null;
-        this.descrizione = null;
+        if(codice == null || descrizione == null) {
+        	throw new NullPointerException("Argomenti nulli");
+        }
+        
+        this.codice = codice;
+        this.descrizione = descrizione;
     }
 
     /**
      * @return the codice
      */
     public String getCodice() {
-        // TODO implementare
-        return null;
+        return this.codice;
     }
 
     /**
      * @return the descrizione
      */
     public String getDescrizione() {
-        // TODO implementare
-        return null;
+        return this.descrizione;
     }
 
     /*
@@ -52,8 +53,9 @@ public abstract class Facility {
      */
     @Override
     public int hashCode() {
-        // TODO implementare
-        return -1;
+        int prime = 101;
+        int result = prime + this.codice.hashCode();
+        return result;
     }
 
     /*
@@ -61,7 +63,20 @@ public abstract class Facility {
      */
     @Override
     public boolean equals(Object obj) {
-        // TODO implementare
+    	if(this == obj) {
+    		return true;
+    	}
+    	if(obj == null) {
+    		return false;
+    	}
+    	if(!(obj instanceof Facility)) {
+    		return false;
+    	}
+    	
+    	Facility other = (Facility) obj;
+    	if(other.codice == this.codice) {
+    		return true;
+    	}
         return false;
     }
 
