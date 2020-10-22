@@ -170,6 +170,7 @@ public class Aula implements Comparable<Aula> {
     	}
 
     	for(Facility facility : this.facilities){
+    	    //se facility == null ho finito di ciclare l'array
     	    if(facility == null){
     	        break;
             }
@@ -181,6 +182,8 @@ public class Aula implements Comparable<Aula> {
         try{
             this.facilities[this.numFacilities] = f;
         }catch(ArrayIndexOutOfBoundsException e){
+            //se numFacilities è > di this.facilities.length copio l'array in una sua coppia ma
+            //con dimensione doppia
             this.facilities = Arrays.copyOf(this.facilities, this.facilities.length * 2);
             this.facilities[this.numFacilities] = f;
         }
@@ -206,6 +209,7 @@ public class Aula implements Comparable<Aula> {
     	}
 
         for (Prenotazione prenotazione : prenotazioni) {
+            //se prenotazione == null ho finito di ciclare l'array
             if(prenotazione == null){
                 break;
             }
@@ -238,9 +242,11 @@ public class Aula implements Comparable<Aula> {
     	boolean satisfy;
         for(Facility requestedFacility : requestedFacilities){
             satisfy = false;
+            //se requestedFacility == null ho finito di ciclare l'array
             if(requestedFacility == null){
                 break;
             }
+            //se facility == null ho finito di ciclare l'array
             for(Facility facility: this.facilities){
                 if(facility == null){
                     break;
@@ -249,6 +255,7 @@ public class Aula implements Comparable<Aula> {
                     satisfy = true;
                 }
             }
+            //se satisfy è false non ho una facilities che soddisfa la richiesta
             if(!satisfy){
                 return false;
             }
@@ -281,6 +288,8 @@ public class Aula implements Comparable<Aula> {
         try{
             this.prenotazioni[this.numPrenotazioni] = new Prenotazione(this, ts, docente, motivo);
         }catch(ArrayIndexOutOfBoundsException e){
+            //se numPrenotazioni > prenotazioni.length copio l'array su un nuovo array
+            //di dimensione doppia
             this.prenotazioni = Arrays.copyOf(this.prenotazioni, this.prenotazioni.length * 2);
             this.prenotazioni[this.numPrenotazioni] = new Prenotazione(this, ts, docente, motivo);
         }
