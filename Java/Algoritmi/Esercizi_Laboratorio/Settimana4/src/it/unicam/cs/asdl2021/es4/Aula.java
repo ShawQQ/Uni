@@ -165,31 +165,27 @@ public class Aula implements Comparable<Aula> {
      *                                  se la facility passata è nulla
      */
     public boolean addFacility(Facility f) {
-        // Nota: attenzione! Per controllare se una facility è già presente
-        // bisogna usare il metodo equals della classe Facility.
-        // Nota: attenzione bis! Si noti che per le sottoclassi di Facility non
-        // è richiesto di ridefinire ulteriormente il metodo equals...
     	if(f == null) {
     		throw new NullPointerException("Facility nulla");
     	}
 
-    	int currentLength = 0;
-
-        try{
-            while (this.facilities[currentLength] != null) {
-                if(f.equals(this.facilities[currentLength])){
-                    return true;
-                }
-                currentLength++;
+    	for(Facility facility : this.facilities){
+    	    if(facility == null){
+    	        break;
             }
-            this.facilities[currentLength++] = f;
-        }catch(ArrayIndexOutOfBoundsException e){
-            this.facilities = Arrays.copyOf(this.facilities, this.facilities.length * 2);
-            this.facilities[currentLength++] = f;
+    	    if(f.equals(facility)){
+    	        return true;
+            }
         }
 
+        try{
+            this.facilities[this.numFacilities] = f;
+        }catch(ArrayIndexOutOfBoundsException e){
+            this.facilities = Arrays.copyOf(this.facilities, this.facilities.length * 2);
+            this.facilities[this.numFacilities] = f;
+        }
         this.numFacilities++;
-    	return true;
+    	return false;
     }
 
     /**
@@ -208,17 +204,16 @@ public class Aula implements Comparable<Aula> {
     	if(ts == null) {
     		throw new NullPointerException("Timeslot nullo");
     	}
-    	
-    	for(int i = 0; i < prenotazioni.length; i++) {
-    		if(prenotazioni[i] == null) {
-    			break;
-    		}
-    		
-    		TimeSlot otherSlot = prenotazioni[i].getTimeSlot();
-    		if(ts.overlapsWith(otherSlot)) {
-    			return false;
-    		}
-    	}
+
+        for (Prenotazione prenotazione : prenotazioni) {
+            if(prenotazione == null){
+                break;
+            }
+            TimeSlot otherSlot = prenotazione.getTimeSlot();
+            if (ts.overlapsWith(otherSlot)) {
+                return false;
+            }
+        }
     	return true;
     }
 
@@ -240,20 +235,23 @@ public class Aula implements Comparable<Aula> {
     		throw new NullPointerException("Set facility nullo");
     	}
 
-    	boolean satisfy = false;
-    	int i = 0;
-    	int j = 0;
-    	while(requestedFacilities[i] != null){
-            while (this.facilities[j] != null) {
-                if(requestedFacilities[i].satisfies(this.facilities[j])){
+    	boolean satisfy;
+        for(Facility requestedFacility : requestedFacilities){
+            satisfy = false;
+            if(requestedFacility == null){
+                break;
+            }
+            for(Facility facility: this.facilities){
+                if(facility == null){
+                    break;
+                }
+                if(facility.satisfies(requestedFacility)){
                     satisfy = true;
                 }
-                j++;
             }
             if(!satisfy){
                 return false;
             }
-            i++;
         }
     	return true;
     }
@@ -280,16 +278,11 @@ public class Aula implements Comparable<Aula> {
             throw new IllegalArgumentException("Aula non disponibile");
         }
 
-        int currentLength = 0;
-
         try{
-            while(this.prenotazioni[currentLength] != null){
-                currentLength++;
-            }
-            this.prenotazioni[currentLength++] = new Prenotazione(this, ts, docente, motivo);
+            this.prenotazioni[this.numPrenotazioni] = new Prenotazione(this, ts, docente, motivo);
         }catch(ArrayIndexOutOfBoundsException e){
             this.prenotazioni = Arrays.copyOf(this.prenotazioni, this.prenotazioni.length * 2);
-            this.prenotazioni[currentLength++] = new Prenotazione(this, ts, docente, motivo);
+            this.prenotazioni[this.numPrenotazioni] = new Prenotazione(this, ts, docente, motivo);
         }
         this.numPrenotazioni++;
     }
