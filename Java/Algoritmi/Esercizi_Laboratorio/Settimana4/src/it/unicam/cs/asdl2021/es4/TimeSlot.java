@@ -3,6 +3,7 @@
  */
 package it.unicam.cs.asdl2021.es4;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
@@ -27,13 +28,6 @@ public class TimeSlot implements Comparable<TimeSlot> {
 
     private final GregorianCalendar stop;
     
-    /*
-     * Timestamp relativi alla data di inizio e alla data di fine
-     */
-    private final long startTimeStamp;
-    
-    private final long stopTimeStamp;
-
     /**
      * Crea un time slot tra due istanti di inizio e fine
      * 
@@ -57,9 +51,6 @@ public class TimeSlot implements Comparable<TimeSlot> {
         }
     	this.start = start;
         this.stop  = stop;
-        //timestamp in secondi(based Java che lo rid� solo in millisecondi)
-        this.startTimeStamp = this.start.getTimeInMillis() / 1000L;
-        this.stopTimeStamp = this.stop.getTimeInMillis() / 1000L;
     }
 
     /**
@@ -79,25 +70,12 @@ public class TimeSlot implements Comparable<TimeSlot> {
     /**
      * @return start in milliseconds
      */
-    public long getStartStamp() {
-    	return this.startTimeStamp;
-    }
-    
-    /*
-     * @return stop in milliseconds
-     */
-    public long getStopStamp() {
-    	return this.stopTimeStamp;
-    }
-    /*
-     * Ridefinire in accordo con equals
-     */
     @Override
     public int hashCode() {
         int prime = 47;
         int result = 1;
-        result = result * prime + (int) (this.startTimeStamp ^ (this.startTimeStamp >>> 32));
-        result = result * prime + (int) (this.stopTimeStamp ^ (this.stopTimeStamp >>> 32));
+        result = result * prime + (int) (this.start.getTimeInMillis() ^ (this.start.getTimeInMillis() >>> 32));
+        result = result * prime + (int) (this.stop.getTimeInMillis() ^ (this.stop.getTimeInMillis() >>> 32));
         return result;
     }
 
@@ -117,12 +95,10 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(!(obj instanceof TimeSlot)){
         	return false;
         }
+
         TimeSlot otherSlot = (TimeSlot) obj;
-        long otherStart = otherSlot.startTimeStamp;
-        long otherStop = otherSlot.stopTimeStamp;
-        //confronto tra timestamp
-        if(this.startTimeStamp != otherStart || this.stopTimeStamp != otherStop) {
-        	return false;
+        if(!this.start.equals(otherSlot.start) || !this.stop.equals(otherSlot.stop)){
+            return false;
         }
         return true;
     }
@@ -139,29 +115,24 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(o == null) {
         	throw new NullPointerException("Impossibile comparare un timeslot null");
         }
-        
-        //confronto timestamp start
-        if(this.startTimeStamp < o.startTimeStamp) {
-        	return -1;
+        if(this.start.equals(o.start) && this.stop.equals(o.stop)){
+            return 0;
         }
-        
-        if(this.startTimeStamp > o.startTimeStamp) {
-        	return 1;
+        //se i due start sono uguali confronto stop
+        if(this.start.equals(o.start)){
+            if(this.stop.before(o.stop)){
+                return -1;
+            }else{
+                return 1;
+            }
+        //altrimenti confronto start
+        }else{
+            if(this.start.before(o.start)){
+                return -1;
+            }else{
+                return 1;
+            }
         }
-        
-        //se i due timestamp start sono == confronto i timestamp stop
-        if(this.startTimeStamp == o.startTimeStamp) {
-        	//se il timeslot finisce prima succede 
-        	if(this.stopTimeStamp < this.stopTimeStamp) {
-        		return -1;
-        	}
-        	//se il timeslot finisce dopo precede
-        	if(this.stopTimeStamp > this.stopTimeStamp) {
-        		return 1;
-        	}
-        }
-        //intervalli uguali
-        return 0;
     }
 
     /**
@@ -180,40 +151,36 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(o == null) {
         	throw new NullPointerException("Impossibile controllare timeslot nulli");
         }
-        
-        TimeSlot startSlot;
-        TimeSlot endSlot;
-        //assicuro che gli slot siano ordinati
-        if(this.compareTo(o) < 0) {
-        	startSlot = this;
-        	endSlot = o;
-        }else {
-        	startSlot = o;
-        	endSlot = this;
-        }
-        
+
+        TimeSlot firstSlot;
+        TimeSlot secondSlot;
         long overlapTime;
-        long startStamp = startSlot.stopTimeStamp;
-        long endStamp = endSlot.startTimeStamp;
-        //controllo se i due intervalli si sovrappongono
-        if(startStamp >= endStamp) {
-        	//se il secondo slot finisce prima del primo il tempo di overlap � pari alla durata totale del secondo slot
-        	//se il primo slot finisce prima del secondo il tempo di overlap � pari alla differenza tra i due timestamp
-        	if(endSlot.stopTimeStamp < startSlot.stopTimeStamp) {
-        		overlapTime = (endSlot.stopTimeStamp - endSlot.startTimeStamp);
-        	}else {
-        		overlapTime = (startStamp - endStamp);
-        	}
-        	//converto overlapTime in minuti
-        	overlapTime = overlapTime / 60L;
-        	//controllo se i due slot si sovrappongono per abbastanza tempo
-        	if(overlapTime > MINUTES_OF_TOLERANCE_FOR_OVERLAPPING) {
-        		return true;
-        	}else {
-        		return false;
-        	}
+        //assicuro che gli slot siano ordinati
+        if(this.compareTo(o) < 0){
+            firstSlot = this;
+            secondSlot = o;
+        }else{
+            firstSlot = o;
+            secondSlot = this;
         }
-        //i due intervalli non si sovrappongono
+
+        //controllo che il secondo timeslot parta prima della fine del secondo
+        if(firstSlot.stop.after(secondSlot.start)){
+            //calcolo tempo di overlap tra i due timeslot
+            if(firstSlot.stop.before(secondSlot.stop)){
+                overlapTime = firstSlot.stop.getTimeInMillis() - secondSlot.start.getTimeInMillis();
+            }else{
+                overlapTime = secondSlot.stop.getTimeInMillis() - secondSlot.start.getTimeInMillis();
+            }
+            //converto overlapTime in minuti
+            overlapTime = overlapTime / 60000L;
+            System.out.println(overlapTime);
+            if(overlapTime > MINUTES_OF_TOLERANCE_FOR_OVERLAPPING){
+                return true;
+            }
+
+            return false;
+        }
         return false;
     }
 
