@@ -174,11 +174,9 @@ public class TimeSlot implements Comparable<TimeSlot> {
             }
             //converto overlapTime in minuti
             overlapTime = overlapTime / 60000L;
-            System.out.println(overlapTime);
             if(overlapTime > MINUTES_OF_TOLERANCE_FOR_OVERLAPPING){
                 return true;
             }
-
             return false;
         }
         return false;
