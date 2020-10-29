@@ -175,7 +175,7 @@ public class Aula implements Comparable<Aula> {
     	        break;
             }
     	    if(f.equals(facility)){
-    	        return true;
+    	        return false;
             }
         }
 
@@ -188,7 +188,7 @@ public class Aula implements Comparable<Aula> {
             this.facilities[this.numFacilities] = f;
         }
         this.numFacilities++;
-    	return false;
+    	return true;
     }
 
     /**
