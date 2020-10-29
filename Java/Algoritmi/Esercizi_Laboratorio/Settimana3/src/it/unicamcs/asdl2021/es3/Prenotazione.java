@@ -28,12 +28,11 @@ public class Prenotazione implements Comparable<Prenotazione> {
      * @param motivo
      *                     il motivo della prenotazione
      * @throws NullPointerException
-     *                                  se uno qualsiasi degli oggetti passati è
+     *                                  se uno qualsiasi degli oggetti passati ï¿½
      *                                  null
      */
     public Prenotazione(String aula, TimeSlot timeSlot, String docente,
             String motivo) {
-        // TODO implementare
         if(aula == null || timeSlot == null || docente == null || motivo == null) {
         	throw new NullPointerException("Impossibile processare argomenti nulli");
         }
@@ -85,7 +84,7 @@ public class Prenotazione implements Comparable<Prenotazione> {
     }
 
     /*
-     * L'uguaglianza è data solo da stessa aula e stesso time slot. Non sono
+     * L'uguaglianza ï¿½ data solo da stessa aula e stesso time slot. Non sono
      * ammesse prenotazioni diverse con stessa aula e stesso time slot.
      */
     @Override
