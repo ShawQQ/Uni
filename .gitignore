@@ -75,9 +75,7 @@ fabric.properties
 /.idea/.gitignore
 /.idea/misc.xml
 /.idea/modules.xml
-/Java/Algoritmi/Esercizi_Laboratorio/Settimana1/Settimana1.iml
-/Java/Algoritmi/Esercizi_Laboratorio/Settimana2/Settimana2.iml
-/Java/Algoritmi/Esercizi_Laboratorio/Settimana3/Settimana3.iml
-/Java/Algoritmi/Esercizi_Laboratorio/Settimana4/Settimana4.iml
+
+/Java/Algoritmi/Esercizi_Laboratorio/*/*.iml
 /.idea/uni.iml
 /.idea/vcs.xml
