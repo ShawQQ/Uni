@@ -4,6 +4,7 @@
 package it.unicam.cs.asdl2021.es5;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -50,6 +51,20 @@ public class TimeSlot implements Comparable<TimeSlot> {
         }
         this.start = start;
         this.stop  = stop;
+    }
+
+    /**
+     * Crea un timeslot partendo da un punto del tempo iniziale
+     * @param start inizio del timeslot
+     * @throws NullPointerException se start è null
+     */
+    public TimeSlot(GregorianCalendar start){
+        if(start == null){
+            throw new NullPointerException("Start nullo");
+        }
+        this.start = start;
+        start.roll(Calendar.MILLISECOND, 1);
+        this.stop = start;
     }
 
     /**
@@ -114,24 +129,10 @@ public class TimeSlot implements Comparable<TimeSlot> {
         if(o == null) {
             throw new NullPointerException("Impossibile comparare un timeslot null");
         }
-        if(this.start.equals(o.start) && this.stop.equals(o.stop)){
-            return 0;
-        }
-        //se i due start sono uguali confronto stop
         if(this.start.equals(o.start)){
-            if(this.stop.before(o.stop)){
-                return -1;
-            }else{
-                return 1;
-            }
-            //altrimenti confronto start
-        }else{
-            if(this.start.before(o.start)){
-                return -1;
-            }else{
-                return 1;
-            }
+            return this.stop.compareTo(o.stop);
         }
+        return this.start.compareTo(o.start);
     }
 
     /**
