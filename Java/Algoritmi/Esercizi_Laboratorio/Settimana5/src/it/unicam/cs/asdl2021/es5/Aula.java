@@ -1,11 +1,7 @@
 package it.unicam.cs.asdl2021.es5;
 
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.sql.Time;
+import java.util.*;
 
 /**
  * Un oggetto della classe aula rappresenta una certa aula con le sue facilities
@@ -42,11 +38,14 @@ public class Aula implements Comparable<Aula> {
      *                                  richieste è nulla
      */
     public Aula(String nome, String location) {
-        // TODO implementare
-        this.location = null;
-        this.nome = null;
-        this.prenotazioni = null;
-        this.facilities = null;
+        if(nome == null || location == null){
+            throw new NullPointerException("Argomenti nulli");
+        }
+
+        this.nome = nome;
+        this.location = location;
+        this.facilities = new HashSet<Facility>();
+        this.prenotazioni = new TreeSet<Prenotazione>();
     }
 
     /**
@@ -64,11 +63,14 @@ public class Aula implements Comparable<Aula> {
      *                                  richieste è nulla
      */
     public Aula(String nome, String location, Set<Facility> facilities) {
-        // TODO implementare
-        this.location = null;
-        this.nome = null;
-        this.prenotazioni = null;
-        this.facilities = null;
+        if(nome == null || location == null || facilities == null){
+            throw new NullPointerException("Argomenti nulli");
+        }
+
+        this.location = location;
+        this.nome = nome;
+        this.prenotazioni = new TreeSet<Prenotazione>();
+        this.facilities = new HashSet<Facility>(facilities);
     }
 
     /*
@@ -76,54 +78,66 @@ public class Aula implements Comparable<Aula> {
      */
     @Override
     public int hashCode() {
-        // TODO implementare
-        return -1;
+        int prime = 31;
+        int result = prime + this.nome.hashCode();
+        return result;
     }
 
     /* Due aule sono uguali se e solo se hanno lo stesso nome */
     @Override
     public boolean equals(Object obj) {
-        // TODO implementare
-        return false;
+        if(this == obj){
+            return true;
+        }
+        if(obj == null){
+            return false;
+        }
+        if(!(obj instanceof Aula)){
+            return false;
+        }
+        Aula other = (Aula) obj;
+        if(!this.nome.equals(other.nome)){
+            return false;
+        }
+        return true;
     }
 
     /* L'ordinamento naturale si basa sul nome dell'aula */
     @Override
     public int compareTo(Aula o) {
-        // TODO implementare
-        return 0;
+        if(o == null){
+            throw new NullPointerException("Aula nulla");
+        }
+
+        return this.nome.compareTo(o.nome);
     }
 
     /**
      * @return the facilities
      */
     public Set<Facility> getFacilities() {
-        // TODO implementare
-        return null;
+        return this.facilities;
     }
 
     /**
      * @return the nome
      */
     public String getNome() {
-        // TODO implementare
-        return null;
+        return this.nome;
     }
 
     /**
      * @return the location
      */
     public String getLocation() {
-        // TODO implementare
-        return null;
+        return this.location;
     }
 
     /**
      * @return the prenotazioni
      */
     public SortedSet<Prenotazione> getPrenotazioni() {
-        // TODO implementare
-        return null;
+        return this.prenotazioni;
     }
 
     /**
@@ -137,8 +151,15 @@ public class Aula implements Comparable<Aula> {
      *                                  se la facility passata è nulla
      */
     public boolean addFacility(Facility f) {
-        // TODO implementare
-        return false;
+        if(f == null){
+            throw new NullPointerException("Facility nulla");
+        }
+
+        if(this.facilities.contains(f)){
+            return false;
+        }
+        this.facilities.add(f);
+        return true;
     }
 
     /**
@@ -154,9 +175,17 @@ public class Aula implements Comparable<Aula> {
      *                                  se il time slot passato è nullo
      */
     public boolean isFree(TimeSlot ts) {
-        // TODO implementare - sfruttare l'ordinamento tra le prenotazioni per
-        // rispondere in maniera efficiente
-        return false;
+        if(ts == null){
+            throw new NullPointerException("TimeSlot nullo");
+        }
+
+        Prenotazione prenotazioneTo = new Prenotazione(this, new TimeSlot(ts.getStop()), "", "");
+        for(Prenotazione prenotazione : this.prenotazioni.headSet(prenotazioneTo)){
+            if(prenotazione.getTimeSlot().overlapsWith(ts)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -172,8 +201,22 @@ public class Aula implements Comparable<Aula> {
      *                                  se il set di facility richieste è nullo
      */
     public boolean satisfiesFacilities(Set<Facility> requestedFacilities) {
-        // TODO implementare
-        return false;
+        if(requestedFacilities == null){
+            throw new NullPointerException("Insiemi di facility nullo");
+        }
+
+        for(Facility requestedFacility : requestedFacilities){
+            boolean satisfies = false;
+            for(Facility facility: this.facilities){
+                if(facility.satisfies(requestedFacility)){
+                    satisfies = true;
+                }
+            }
+            if(!satisfies){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -191,7 +234,14 @@ public class Aula implements Comparable<Aula> {
      *                                      richieste è nulla.
      */
     public void addPrenotazione(TimeSlot ts, String docente, String motivo) {
-        // TODO implementare
+        if(ts == null || docente == null || motivo == null){
+            throw new NullPointerException("Argomenti nulli");
+        }
+        if(!this.isFree(ts)){
+            throw new IllegalArgumentException("Aula non libera");
+        }
+
+        this.prenotazioni.add(new Prenotazione(this, ts, docente, motivo));
     }
 
     /**
@@ -205,8 +255,15 @@ public class Aula implements Comparable<Aula> {
      *                                  se la prenotazione passata è null
      */
     public boolean removePrenotazione(Prenotazione p) {
-        // TODO implementare
-        return false;
+        if(p == null){
+            throw new NullPointerException("Prenotazione nulla");
+        }
+        if(!this.prenotazioni.contains(p)){
+            return false;
+        }
+
+        this.prenotazioni.remove(p);
+        return true;
     }
 
     /**
@@ -221,8 +278,23 @@ public class Aula implements Comparable<Aula> {
      *                                  se il punto nel tempo passato è nullo.
      */
     public boolean removePrenotazioniBefore(GregorianCalendar timePoint) {
-        // TODO implementare - sfruttare l'ordinamento tra le prenotazioni per
-        // eseguire in maniera efficiente
-        return false;
+        if(timePoint == null){
+            throw new NullPointerException("Punto del tempo nullo");
+        }
+
+        Prenotazione deleteFrom = new Prenotazione(this, new TimeSlot(timePoint), "", "");
+        Iterator<Prenotazione> iterator = this.prenotazioni.headSet(deleteFrom).iterator();
+        boolean deleted = false;
+
+        while(iterator.hasNext()){
+            iterator.next();
+            iterator.remove();
+            deleted = true;
+        }
+
+        if(!deleted){
+            return false;
+        }
+        return true;
     }
 }
