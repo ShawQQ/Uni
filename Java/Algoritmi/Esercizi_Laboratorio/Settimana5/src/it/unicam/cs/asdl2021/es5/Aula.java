@@ -2,6 +2,7 @@ package it.unicam.cs.asdl2021.es5;
 
 import java.sql.Time;
 import java.util.*;
+import java.util.spi.CalendarNameProvider;
 
 /**
  * Un oggetto della classe aula rappresenta una certa aula con le sue facilities
@@ -179,8 +180,20 @@ public class Aula implements Comparable<Aula> {
             throw new NullPointerException("TimeSlot nullo");
         }
 
+        //creo due prenotazioni fittizie per filtrare tutte le prenotazioni dalla mezzanotte di timeslot fino
+        //alla sua fine
+        GregorianCalendar g1 = new GregorianCalendar(
+            ts.getStart().get(Calendar.YEAR),
+            ts.getStart().get(Calendar.MONTH),
+            ts.getStart().get(Calendar.DAY_OF_MONTH),
+            0,
+            0,
+            0
+        );
+        Prenotazione prenotazioneFrom = new Prenotazione(this, new TimeSlot(g1), "", "");
         Prenotazione prenotazioneTo = new Prenotazione(this, new TimeSlot(ts.getStop()), "", "");
-        for(Prenotazione prenotazione : this.prenotazioni.headSet(prenotazioneTo)){
+
+        for(Prenotazione prenotazione : this.prenotazioni.subSet(prenotazioneFrom, prenotazioneTo)){
             if(prenotazione.getTimeSlot().overlapsWith(ts)){
                 return false;
             }
