@@ -139,13 +139,7 @@ public class ASDL2021SingleLinkedList<E> implements List<E> {
             //se la lista è vuota salvo il nodo sulla coda e sulla testa
             this.head = this.tail = newNode;
         }else{
-            //itero la lista fino al primo elemento con next == null
-            Node<E> last = this.head;
-            while(last.next != null){
-                last = last.next;
-            }
-            //aggiorno il puntatore di last e salvo il nuovo nodo in fondo alla lista
-            last.next = newNode;
+            this.tail.next = newNode;
             this.tail = newNode;
         }
         this.size++;
