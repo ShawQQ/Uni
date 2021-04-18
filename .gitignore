@@ -89,3 +89,12 @@ fabric.properties
 /Java/Algoritmi/Esercizi_Laboratorio/*/.idea/vcs.xml
 /Java/.idea/workspace.xml
 /Java/Algoritmi/Esercizi_Laboratorio/*/.idea/workspace.xml
+
+
+
+# SistemiOperativi
+
+/SistemiOperativi/Laboratorio/.idea
+/SistemiOperativi/Laboratorio/.vscode
+/SistemiOperativi/Laboratorio/*/build
+/SistemiOperativi/Laboratorio/*/.idea

@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.10)
+
+# set the project name
+project(Liste)
+
+include_directories(head)
+
+file(GLOB SOURCES "src/*.c")
+# add the executable
+add_executable(Liste ${SOURCES})
