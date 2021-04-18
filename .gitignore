@@ -98,3 +98,9 @@ fabric.properties
 /SistemiOperativi/Laboratorio/.vscode
 /SistemiOperativi/Laboratorio/*/build
 /SistemiOperativi/Laboratorio/*/.idea
+
+# Avanza
+
+/Avanzata/*/.idea
+/Avanzata/*/gradle
+
